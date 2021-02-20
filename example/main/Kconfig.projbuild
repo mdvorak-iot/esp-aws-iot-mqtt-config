@@ -1,0 +1,39 @@
+menu "Example Configuration"
+
+    config EXAMPLE_WIFI_SSID
+        string "WiFi SSID"
+        default ""
+        help
+            SSID (network name) for the example to connect to.
+
+    config EXAMPLE_WIFI_PASSWORD
+        string "WiFi Password"
+        default ""
+        help
+            WiFi password (WPA, WPA2 or WPA3) for the example to use.
+
+    config EXAMPLE_AWS_IOT_MQTT_STORE
+        bool "Store AWS IoT MQTT config"
+        default n
+
+    config EXAMPLE_AWS_IOT_MQTT_HOST
+        string "AWS IoT MQTT host"
+        depends on EXAMPLE_AWS_IOT_MQTT_STORE
+        default ""
+        help
+            Your AWS hostname, can be found on the thing detail.
+
+    config EXAMPLE_AWS_IOT_MQTT_PORT
+        int "AWS IoT MQTT port"
+        depends on EXAMPLE_AWS_IOT_MQTT_STORE
+        default 8883
+        help
+            MQTT port, by default its 8883.
+
+    config EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
+        string "AWS IoT MQTT client ID"
+        depends on EXAMPLE_AWS_IOT_MQTT_STORE
+        default ""
+        help
+            Usually found on the thing detail.
+endmenu
