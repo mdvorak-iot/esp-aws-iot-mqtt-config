@@ -1,5 +1,5 @@
-#ifndef TODO_H
-#define TODO_H
+#ifndef AWS_IOT_MQTT_CONFIG_H_
+#define AWS_IOT_MQTT_CONFIG_H_
 
 #ifdef __cplusplus
 extern "C" {
