@@ -9,11 +9,17 @@
     }                               \
     (void)0
 
+inline static esp_err_t nvs_helper_erase_key(nvs_handle_t handle, const char *key)
+{
+    esp_err_t err = nvs_erase_key(handle, key);
+    return err != ESP_ERR_NVS_NOT_FOUND ? err : ESP_OK; // ignore not found error
+}
+
 static esp_err_t nvs_helper_set_blob_or_string(nvs_handle_t handle, const char *key, const char *value, size_t length)
 {
     if (value == NULL)
     {
-        return nvs_erase_key(handle, key);
+        return nvs_helper_erase_key(handle, key);
     }
 
     if (length == 0)
@@ -29,7 +35,7 @@ static esp_err_t nvs_helper_set_string(nvs_handle_t handle, const char *key, con
 {
     if (value == NULL)
     {
-        return nvs_erase_key(handle, key);
+        return nvs_helper_erase_key(handle, key);
     }
     return nvs_set_str(handle, key, value);
 }
