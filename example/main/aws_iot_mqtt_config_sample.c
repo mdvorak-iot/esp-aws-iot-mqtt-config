@@ -149,6 +149,7 @@ void app_main()
     // Initialize MQTT
     esp_mqtt_client_config_t mqtt_cfg = {};
     ESP_ERROR_CHECK(aws_iot_mqtt_config_load(&mqtt_cfg));
+    ESP_LOGI(TAG, "mqtt host=%s, port=%u, client_id=%s", mqtt_cfg.host, mqtt_cfg.port, mqtt_cfg.client_id);
 
     mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
     if (!mqtt_client)
