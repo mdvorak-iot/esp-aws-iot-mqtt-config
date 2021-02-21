@@ -26,9 +26,9 @@ menu "Example Configuration"
     config EXAMPLE_AWS_IOT_MQTT_PORT
         int "AWS IoT MQTT port"
         depends on EXAMPLE_AWS_IOT_MQTT_STORE
-        default 8883
+        default 0
         help
-            MQTT port, by default its 8883.
+            MQTT port, 0 to use transport default (configured in MQTT component).
 
     choice EXAMPLE_AWS_IOT_MQTT_TRANSPORT
         prompt "AWS IoT MQTT transport type"
