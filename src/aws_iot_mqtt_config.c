@@ -1,6 +1,9 @@
 #include "aws_iot_mqtt_config.h"
+#include <esp_log.h>
 #include <mqtt_client.h>
 #include <nvs.h>
+
+static const char TAG[] = "aws_iot_mqtt_config";
 
 #define HANDLE_ERROR(expr, action)  \
     {                               \
@@ -130,12 +133,10 @@ esp_err_t aws_iot_mqtt_config_load(esp_mqtt_client_config_t *mqtt_cfg)
     HANDLE_ERROR(err = nvs_helper_get_blob(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENTKEY_PASSWORD, &mqtt_cfg->clientkey_password, &clientkey_password_len), goto error);
     mqtt_cfg->clientkey_password_len = clientkey_password_len;
 
-    // Commit
-    err = nvs_commit(handle);
-
 error:
     // Close and exit
     nvs_close(handle);
+    ESP_LOGI(TAG, "config loaded: %d (%s)", err, esp_err_to_name(err));
     return err;
 }
 
@@ -169,6 +170,7 @@ esp_err_t aws_iot_mqtt_config_store(const esp_mqtt_client_config_t *mqtt_cfg)
 error:
     // Close and exit
     nvs_close(handle);
+    ESP_LOGI(TAG, "config stored: %d (%s)", err, esp_err_to_name(err));
     return err;
 }
 
@@ -191,4 +193,6 @@ void aws_iot_mqtt_config_free_unused(esp_mqtt_client_config_t *mqtt_cfg)
     free((char *)mqtt_cfg->clientkey_password);
     mqtt_cfg->clientkey_password = NULL;
     mqtt_cfg->clientkey_password_len = 0;
+
+    ESP_LOGD(TAG, "config mem freed");
 }

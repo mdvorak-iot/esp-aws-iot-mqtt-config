@@ -127,8 +127,8 @@ void app_main()
 
     // Initialize MQTT
     esp_mqtt_client_config_t mqtt_cfg = {};
-    mqtt_cfg.use_global_ca_store = true;
     ESP_ERROR_CHECK(aws_iot_mqtt_config_load(&mqtt_cfg));
+    mqtt_cfg.use_global_ca_store = true;
 
     mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
     if (!mqtt_client)
