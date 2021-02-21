@@ -9,15 +9,18 @@ static bool mqtt_started = false;
 static esp_mqtt_client_handle_t mqtt_client = NULL;
 
 #ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_STORE
+extern const uint8_t aws_root_ca_pem_start[] asm("_binary_aws_root_ca_pem_start");
+extern const uint8_t aws_root_ca_pem_end[] asm("_binary_aws_root_ca_pem_end");
 extern const uint8_t certificate_pem_crt_start[] asm("_binary_certificate_pem_crt_start");
 extern const uint8_t certificate_pem_crt_end[] asm("_binary_certificate_pem_crt_end");
 extern const uint8_t private_pem_key_start[] asm("_binary_private_pem_key_start");
 extern const uint8_t private_pem_key_end[] asm("_binary_private_pem_key_end");
 #endif
 
-void store_example()
+void setup_example()
 {
 #if CONFIG_EXAMPLE_AWS_IOT_MQTT_STORE
+    ESP_LOGI(TAG, "updating stored aws config");
     esp_mqtt_client_config_t mqtt_cfg = {};
 
 #ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_HOST
@@ -29,6 +32,9 @@ void store_example()
 #ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
     mqtt_cfg.client_id = CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID;
 #endif
+
+    mqtt_cfg.cert_pem = (const char *)aws_root_ca_pem_start;
+    mqtt_cfg.cert_len = aws_root_ca_pem_end - aws_root_ca_pem_start;
 
     mqtt_cfg.client_cert_pem = (const char *)certificate_pem_crt_start;
     mqtt_cfg.client_cert_len = certificate_pem_crt_end - certificate_pem_crt_start;
@@ -132,7 +138,7 @@ void app_main()
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     // Store config, if configured
-    store_example();
+    setup_example();
 
     // Initialize WiFi
     setup_wifi();
@@ -140,7 +146,6 @@ void app_main()
     // Initialize MQTT
     esp_mqtt_client_config_t mqtt_cfg = {};
     ESP_ERROR_CHECK(aws_iot_mqtt_config_load(&mqtt_cfg));
-    mqtt_cfg.use_global_ca_store = true;
 
     mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
     if (!mqtt_client)
