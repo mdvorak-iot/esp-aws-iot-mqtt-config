@@ -1,5 +1,41 @@
-# esp-aws-iot-mqtt-config
+# aws_iot_mqtt_config component
 
 ![platformio build](https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config/workflows/platformio%20build/badge.svg)
 
-TODO Description
+Component for [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/latest). Provides functions to store and load
+[MQTT config](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/protocols/mqtt.html#_CPPv424esp_mqtt_client_config_t)
+attributes
+to/from [NVS storage](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/storage/nvs_flash.html).
+
+Following attributes are managed:
+
+| name |
+|:----:|
+| `host` |
+| `port` |
+| `uri` |
+| `transport` |
+| `cert_pem`, `cert_len` |
+| `client_cert_pem`, `client_cert_len` |
+| `client_key_pem`, `client_key_len` |
+| `clientkey_password`, `clientkey_password_len` |
+
+## Usage
+
+See [example](./example/main/lib_template_example_main.c).
+
+Note that when attributes are loaded into config, they are newly allocated and should be freed when not needed.
+
+`esp_mqtt_client_init()` method creates copy of some attributes, but does not copy certificates and key. Those must not
+be freed as long as mqtt client exists.
+
+```
+esp_mqtt_client_config_t mqtt_cfg = {};
+ESP_ERROR_CHECK(aws_iot_mqtt_config_load(&mqtt_cfg));
+
+esp_mqtt_client_handle_t mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
+// ...
+
+aws_iot_mqtt_config_free_unused(&mqtt_cfg);
+ESP_ERROR_CHECK(esp_mqtt_client_start(mqtt_client));
+```
