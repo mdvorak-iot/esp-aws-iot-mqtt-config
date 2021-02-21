@@ -19,6 +19,21 @@ Following attributes are managed:
 
 ## Usage
 
+When used as IDF component, add it as a Git submodule
+
+```
+git submodule add --name aws_iot_mqtt_config https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config.git components/aws_iot_mqtt_config
+```
+
+When used as [platformio](https://platformio.org) library, add it to `platformio.ini`:
+
+```
+[env]
+lib_deps = https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config.git
+```
+
+### Code
+
 See [example](./example/main/lib_template_example_main.c).
 
 Note that when attributes are loaded into config, they are newly allocated and should be freed when not needed.
