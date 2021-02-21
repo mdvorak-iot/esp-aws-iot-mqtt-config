@@ -33,6 +33,7 @@ menu "Example Configuration"
     choice EXAMPLE_AWS_IOT_MQTT_TRANSPORT
         prompt "AWS IoT MQTT transport type"
         default EXAMPLE_AWS_IOT_MQTT_TRANSPORT_SSL
+        depends on EXAMPLE_AWS_IOT_MQTT_STORE
 
         config EXAMPLE_AWS_IOT_MQTT_TRANSPORT_UNKNOWN
             bool "Unknown"
@@ -53,6 +54,7 @@ menu "Example Configuration"
         default 3 if EXAMPLE_AWS_IOT_MQTT_TRANSPORT_WS
         default 4 if EXAMPLE_AWS_IOT_MQTT_TRANSPORT_WSS
         default 0
+        depends on EXAMPLE_AWS_IOT_MQTT_STORE
 
     config EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
         string "AWS IoT MQTT client ID"
