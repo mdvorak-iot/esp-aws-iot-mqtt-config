@@ -34,7 +34,7 @@ lib_deps = https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config.git
 
 ### Code
 
-See [example](./example/main/lib_template_example_main.c).
+See [example](./example/main/aws_iot_mqtt_config_sample.c).
 
 Note that when attributes are loaded into config, they are newly allocated and should be freed when not needed.
 
