@@ -9,16 +9,13 @@ to/from [NVS storage](https://docs.espressif.com/projects/esp-idf/en/latest/esp3
 
 Following attributes are managed:
 
-| name |
-|:----:|
-| `host` |
-| `port` |
-| `uri` |
-| `transport` |
-| `cert_pem`, `cert_len` |
-| `client_cert_pem`, `client_cert_len` |
-| `client_key_pem`, `client_key_len` |
-| `clientkey_password`, `clientkey_password_len` |
+* `host`
+* `port`
+* `uri`
+* `cert_pem`, `cert_len`
+* `client_cert_pem`, `client_cert_len`
+* `client_key_pem`, `client_key_len`
+* `clientkey_password`, `clientkey_password_len`
 
 ## Usage
 
