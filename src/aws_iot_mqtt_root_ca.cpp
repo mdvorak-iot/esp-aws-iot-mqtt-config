@@ -1,4 +1,7 @@
------BEGIN CERTIFICATE-----
+// Do not remove include "aws_iot_mqtt_config.h"!
+#include "aws_iot_mqtt_config.h"
+
+const char AWS_IOT_ROOT_CA[] = R"~~~(-----BEGIN CERTIFICATE-----
 MIIDQTCCAimgAwIBAgITBmyfz5m/jAo54vB4ikPmljZbyjANBgkqhkiG9w0BAQsF
 ADA5MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRkwFwYDVQQDExBBbWF6
 b24gUm9vdCBDQSAxMB4XDTE1MDUyNjAwMDAwMFoXDTM4MDExNzAwMDAwMFowOTEL
@@ -17,4 +20,6 @@ N+gDS63pYaACbvXy8MWy7Vu33PqUXHeeE6V/Uq2V8viTO96LXFvKWlJbYK8U90vv
 o/ufQJVtMVT8QtPHRh8jrdkPSHCa2XV4cdFyQzR1bldZwgJcJmApzyMZFo6IQ6XU
 5MsI+yMRQ+hDKXJioaldXgjUkK642M4UwtBV8ob2xJNDd2ZhwLnoQdeXeGADbkpy
 rqXRfboQnoZsG4q5WTP468SQvvG5
------END CERTIFICATE-----
+-----END CERTIFICATE-----)~~~";
+
+const size_t AWS_IOT_ROOT_CA_LEN = sizeof(AWS_IOT_ROOT_CA); // Includes null-terminating char

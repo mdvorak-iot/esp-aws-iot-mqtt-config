@@ -9,45 +9,11 @@ static bool mqtt_started = false;
 static esp_mqtt_client_handle_t mqtt_client = NULL;
 
 #ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CONFIG
-extern const uint8_t aws_root_ca_pem_start[] asm("_binary_aws_root_ca_pem_start");
-extern const uint8_t aws_root_ca_pem_end[] asm("_binary_aws_root_ca_pem_end");
 extern const uint8_t certificate_pem_crt_start[] asm("_binary_certificate_pem_crt_start");
 extern const uint8_t certificate_pem_crt_end[] asm("_binary_certificate_pem_crt_end");
 extern const uint8_t private_pem_key_start[] asm("_binary_private_pem_key_start");
 extern const uint8_t private_pem_key_end[] asm("_binary_private_pem_key_end");
 #endif
-
-void setup_example()
-{
-#if CONFIG_EXAMPLE_AWS_IOT_MQTT_CONFIG
-    ESP_LOGI(TAG, "updating stored aws config");
-    esp_mqtt_client_config_t mqtt_cfg = {};
-
-#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_HOST
-    mqtt_cfg.host = CONFIG_EXAMPLE_AWS_IOT_MQTT_HOST;
-#endif
-#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_PORT
-    mqtt_cfg.port = CONFIG_EXAMPLE_AWS_IOT_MQTT_PORT;
-#endif
-#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
-    mqtt_cfg.client_id = CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID;
-#endif
-#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_TRANSPORT
-    mqtt_cfg.transport = CONFIG_EXAMPLE_AWS_IOT_MQTT_TRANSPORT;
-#endif
-
-    mqtt_cfg.cert_pem = (const char *)aws_root_ca_pem_start;
-    mqtt_cfg.cert_len = aws_root_ca_pem_end - aws_root_ca_pem_start;
-
-    mqtt_cfg.client_cert_pem = (const char *)certificate_pem_crt_start;
-    mqtt_cfg.client_cert_len = certificate_pem_crt_end - certificate_pem_crt_start;
-
-    mqtt_cfg.client_key_pem = (const char *)private_pem_key_start;
-    mqtt_cfg.client_key_len = private_pem_key_end - private_pem_key_start;
-
-    ESP_ERROR_CHECK(aws_iot_mqtt_config_store(&mqtt_cfg));
-#endif
-}
 
 static void wifi_event_handler(__unused void *handler_args, esp_event_base_t event_base, int32_t event_id, __unused void *event_data)
 {
@@ -123,6 +89,29 @@ static void setup_wifi()
 #endif
 }
 
+void setup_example()
+{
+#if CONFIG_EXAMPLE_AWS_IOT_MQTT_CONFIG
+    ESP_LOGI(TAG, "updating stored aws config");
+    esp_mqtt_client_config_t mqtt_cfg = {};
+
+    mqtt_cfg.host = CONFIG_EXAMPLE_AWS_IOT_MQTT_HOST;
+    mqtt_cfg.port = CONFIG_EXAMPLE_AWS_IOT_MQTT_PORT;
+    mqtt_cfg.client_id = CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID;
+    mqtt_cfg.transport = CONFIG_EXAMPLE_AWS_IOT_MQTT_TRANSPORT;
+
+    ESP_LOGI(TAG, "%.*s", (uint32_t)mqtt_cfg.cert_len, mqtt_cfg.cert_pem);
+
+    mqtt_cfg.client_cert_pem = (const char *)certificate_pem_crt_start;
+    mqtt_cfg.client_cert_len = certificate_pem_crt_end - certificate_pem_crt_start;
+
+    mqtt_cfg.client_key_pem = (const char *)private_pem_key_start;
+    mqtt_cfg.client_key_len = private_pem_key_end - private_pem_key_start;
+
+    ESP_ERROR_CHECK(aws_iot_mqtt_config_store(&mqtt_cfg));
+#endif
+}
+
 void app_main()
 {
     esp_log_level_set("*", ESP_LOG_INFO);
@@ -148,8 +137,14 @@ void app_main()
 
     // Initialize MQTT
     esp_mqtt_client_config_t mqtt_cfg = {};
+    mqtt_cfg.cert_pem = AWS_IOT_ROOT_CA;
+    //mqtt_cfg.cert_len = AWS_IOT_ROOT_CA_LEN;
     ESP_ERROR_CHECK(aws_iot_mqtt_config_load(&mqtt_cfg));
     ESP_LOGI(TAG, "mqtt host=%s, port=%u, client_id=%s", mqtt_cfg.host, mqtt_cfg.port, mqtt_cfg.client_id);
+
+    ESP_LOGW(TAG, "mqtt_cfg.cert_pem=%s", mqtt_cfg.cert_pem);
+    ESP_LOGW(TAG, "mqtt_cfg.client_cert_pem=%s", mqtt_cfg.client_cert_pem);
+    ESP_LOGW(TAG, "mqtt_cfg.client_key_pem=%s", mqtt_cfg.client_key_pem);
 
     mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
     if (!mqtt_client)

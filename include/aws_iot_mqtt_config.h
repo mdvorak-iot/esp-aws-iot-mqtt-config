@@ -9,6 +9,20 @@ extern "C" {
 #endif
 
 /**
+ * @brief Current AWS root certificate authority.
+ *
+ * For security reasons, it is better to have CA part of a firmware, and not a configuration.
+ *
+ * @see AWS_IOT_ROOT_CA_LEN
+ */
+extern const char AWS_IOT_ROOT_CA[];
+/**
+ * @brief Length (in bytes) of AWS_IOT_ROOT_CA.
+ * @see AWS_IOT_ROOT_CA
+ */
+extern const size_t AWS_IOT_ROOT_CA_LEN;
+
+/**
  * @brief Loads MQTT configuration from NVS storage and stores it into MQTT config object.
  *
  * All loaded strings are newly allocated using malloc() - they must be freed when not needed.
