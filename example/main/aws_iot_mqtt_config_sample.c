@@ -8,7 +8,7 @@ static const char TAG[] = "example";
 static bool mqtt_started = false;
 static esp_mqtt_client_handle_t mqtt_client = NULL;
 
-#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_STORE
+#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CONFIG
 extern const uint8_t aws_root_ca_pem_start[] asm("_binary_aws_root_ca_pem_start");
 extern const uint8_t aws_root_ca_pem_end[] asm("_binary_aws_root_ca_pem_end");
 extern const uint8_t certificate_pem_crt_start[] asm("_binary_certificate_pem_crt_start");
@@ -19,7 +19,7 @@ extern const uint8_t private_pem_key_end[] asm("_binary_private_pem_key_end");
 
 void setup_example()
 {
-#if CONFIG_EXAMPLE_AWS_IOT_MQTT_STORE
+#if CONFIG_EXAMPLE_AWS_IOT_MQTT_CONFIG
     ESP_LOGI(TAG, "updating stored aws config");
     esp_mqtt_client_config_t mqtt_cfg = {};
 
