@@ -43,6 +43,8 @@ be freed as long as mqtt client exists.
 
 ```
 esp_mqtt_client_config_t mqtt_cfg = {};
+mqtt_cfg.cert_pem = AWS_IOT_ROOT_CA;
+mqtt_cfg.cert_len = AWS_IOT_ROOT_CA_LEN;
 ESP_ERROR_CHECK(aws_iot_mqtt_config_load(&mqtt_cfg));
 
 esp_mqtt_client_handle_t mqtt_client = esp_mqtt_client_init(&mqtt_cfg);
