@@ -1,4 +1,4 @@
-menu "Example Configuration"
+menu "Example config"
 
     config EXAMPLE_WIFI_CONFIG
         bool "Override and store WiFI config"
@@ -21,20 +21,6 @@ menu "Example Configuration"
     config EXAMPLE_AWS_IOT_MQTT_CONFIG
         bool "Store AWS IoT MQTT config"
         default n
-
-    config EXAMPLE_AWS_IOT_MQTT_HOST
-        string "AWS IoT MQTT host"
-        depends on EXAMPLE_AWS_IOT_MQTT_CONFIG
-        default ""
-        help
-            Your AWS hostname, can be found on the thing detail.
-
-    config EXAMPLE_AWS_IOT_MQTT_PORT
-        int "AWS IoT MQTT port"
-        depends on EXAMPLE_AWS_IOT_MQTT_CONFIG
-        default 0
-        help
-            MQTT port, 0 to use transport default (configured in MQTT component).
 
     choice EXAMPLE_AWS_IOT_MQTT_TRANSPORT
         prompt "AWS IoT MQTT transport type"
@@ -61,6 +47,20 @@ menu "Example Configuration"
         default 4 if EXAMPLE_AWS_IOT_MQTT_TRANSPORT_WSS
         default 0
         depends on EXAMPLE_AWS_IOT_MQTT_CONFIG
+
+    config EXAMPLE_AWS_IOT_MQTT_PORT
+        int "AWS IoT MQTT port"
+        depends on EXAMPLE_AWS_IOT_MQTT_CONFIG
+        default 0
+        help
+            MQTT port, 0 to use transport default (configured in MQTT component).
+
+    config EXAMPLE_AWS_IOT_MQTT_HOST
+        string "AWS IoT MQTT host"
+        depends on EXAMPLE_AWS_IOT_MQTT_CONFIG
+        default ""
+        help
+            Your AWS hostname, can be found on the thing detail.
 
     config EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
         string "AWS IoT MQTT client ID"
