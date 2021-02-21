@@ -54,12 +54,41 @@ static esp_err_t nvs_helper_set_string(nvs_handle_t handle, const char *key, con
     return nvs_set_str(handle, key, value);
 }
 
+esp_err_t nvs_helper_get_u32(nvs_handle_t handle, const char *key, uint32_t *value)
+{
+    if (*value == 0)
+    {
+        nvs_get_u32(handle, key, value);
+        ESP_LOGD(TAG, "loaded u32 %s=%u", key, *value);
+    }
+    else
+    {
+        ESP_LOGD(TAG, "not overwriting u32 %s", key);
+    }
+    return ESP_OK;
+}
+
+esp_err_t nvs_helper_get_i32(nvs_handle_t handle, const char *key, int32_t *value)
+{
+    if (*value == 0)
+    {
+        nvs_get_i32(handle, key, value);
+        ESP_LOGD(TAG, "loaded i32 %s=%u", key, *value);
+    }
+    else
+    {
+        ESP_LOGD(TAG, "not overwriting i32 %s", key);
+    }
+    return ESP_OK;
+}
+
 static esp_err_t nvs_helper_get_string(nvs_handle_t handle, const char *key, const char **str, size_t *str_len)
 {
-    // Already contains something, this is probably an user error
+    // Don't overwrite existing value
     if (*str != NULL)
     {
-        return ESP_ERR_INVALID_ARG;
+        ESP_LOGD(TAG, "not overwriting string %s", key);
+        return ESP_OK;
     }
 
     // Get value length, including null terminating character
@@ -86,10 +115,11 @@ static esp_err_t nvs_helper_get_string(nvs_handle_t handle, const char *key, con
 
 static esp_err_t nvs_helper_get_blob(nvs_handle_t handle, const char *key, const char **blob, size_t *blob_len)
 {
-    // Already contains something, this is probably an user error
+    // Don't overwrite existing value
     if (*blob != NULL)
     {
-        return ESP_ERR_INVALID_ARG;
+        ESP_LOGD(TAG, "not overwriting blob %s", key);
+        return ESP_OK;
     }
 
     // Get value length, including null terminating character
@@ -136,19 +166,12 @@ esp_err_t aws_iot_mqtt_config_load(esp_mqtt_client_config_t *mqtt_cfg)
 
     // Load
     HANDLE_ERROR(err = nvs_helper_get_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_HOST, &mqtt_cfg->host, NULL), goto error);
-
-    mqtt_cfg->port = 0; // reset and ignore error
-    nvs_get_u32(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_PORT, &mqtt_cfg->port);
-    ESP_LOGD(TAG, "loaded u32 %s=%u", AWS_IOT_MQTT_CONFIG_NVS_KEY_PORT, mqtt_cfg->port);
-
+    HANDLE_ERROR(err = nvs_helper_get_u32(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_PORT, &mqtt_cfg->port), goto error);
     HANDLE_ERROR(err = nvs_helper_get_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_URI, &mqtt_cfg->uri, NULL), goto error);
     HANDLE_ERROR(err = nvs_helper_get_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_ID, &mqtt_cfg->client_id, NULL), goto error);
-
-    int32_t transport = 0;
-    nvs_get_i32(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_TRANSPORT, &transport); // ignore error
+    int32_t transport = mqtt_cfg->transport;
+    HANDLE_ERROR(err = nvs_helper_get_i32(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_TRANSPORT, &transport), goto error);
     mqtt_cfg->transport = transport;
-    ESP_LOGD(TAG, "loaded i32 %s=%d", AWS_IOT_MQTT_CONFIG_NVS_KEY_TRANSPORT, transport);
-
     HANDLE_ERROR(err = nvs_helper_get_blob(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CERT, &mqtt_cfg->cert_pem, &mqtt_cfg->cert_len), goto error);
     HANDLE_ERROR(err = nvs_helper_get_blob(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_CERT, &mqtt_cfg->client_cert_pem, &mqtt_cfg->client_cert_len), goto error);
     HANDLE_ERROR(err = nvs_helper_get_blob(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_KEY, &mqtt_cfg->client_key_pem, &mqtt_cfg->client_key_len), goto error);
