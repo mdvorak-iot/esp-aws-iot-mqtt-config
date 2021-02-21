@@ -63,7 +63,7 @@ esp_err_t nvs_helper_get_u32(nvs_handle_t handle, const char *key, uint32_t *val
     }
     else
     {
-        ESP_LOGD(TAG, "not overwriting u32 %s", key);
+        ESP_LOGD(TAG, "skipping u32 %s", key);
     }
     return ESP_OK;
 }
@@ -77,7 +77,7 @@ esp_err_t nvs_helper_get_i32(nvs_handle_t handle, const char *key, int32_t *valu
     }
     else
     {
-        ESP_LOGD(TAG, "not overwriting i32 %s", key);
+        ESP_LOGD(TAG, "skipping i32 %s", key);
     }
     return ESP_OK;
 }
@@ -87,7 +87,7 @@ static esp_err_t nvs_helper_get_string(nvs_handle_t handle, const char *key, con
     // Don't overwrite existing value
     if (*str != NULL)
     {
-        ESP_LOGD(TAG, "not overwriting string %s", key);
+        ESP_LOGD(TAG, "skipping string %s", key);
         return ESP_OK;
     }
 
@@ -118,7 +118,7 @@ static esp_err_t nvs_helper_get_blob(nvs_handle_t handle, const char *key, const
     // Don't overwrite existing value
     if (*blob != NULL)
     {
-        ESP_LOGD(TAG, "not overwriting blob %s", key);
+        ESP_LOGD(TAG, "skipping blob %s", key);
         return ESP_OK;
     }
 
