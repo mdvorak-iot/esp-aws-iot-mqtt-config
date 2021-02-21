@@ -22,7 +22,7 @@ Following attributes are managed:
 When used as IDF component, add it as a Git submodule
 
 ```
-git submodule add --name aws_iot_mqtt_config https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config.git components/aws_iot_mqtt_config
+git submodule add https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config.git components/aws_iot_mqtt_config
 ```
 
 When used as [platformio](https://platformio.org) library, add it to `platformio.ini`:
