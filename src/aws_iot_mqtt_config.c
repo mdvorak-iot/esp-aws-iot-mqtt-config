@@ -15,7 +15,15 @@ static const char TAG[] = "aws_iot_mqtt_config";
 inline static esp_err_t nvs_helper_erase_key(nvs_handle_t handle, const char *key)
 {
     esp_err_t err = nvs_erase_key(handle, key);
-    return err != ESP_ERR_NVS_NOT_FOUND ? err : ESP_OK; // ignore not found error
+    if (err != ESP_ERR_NVS_NOT_FOUND) // ignore not found error
+    {
+        ESP_LOGD(TAG, "erased %s", key);
+        return err;
+    }
+    else
+    {
+        return ESP_OK;
+    }
 }
 
 static esp_err_t nvs_helper_set_blob_or_string(nvs_handle_t handle, const char *key, const char *value, size_t length)
@@ -31,6 +39,7 @@ static esp_err_t nvs_helper_set_blob_or_string(nvs_handle_t handle, const char *
         length = strlen(value) + 1;
     }
 
+    ESP_LOGD(TAG, "storing blob %s (%zu bytes)", key, length);
     return nvs_set_blob(handle, key, value, length);
 }
 
@@ -40,6 +49,8 @@ static esp_err_t nvs_helper_set_string(nvs_handle_t handle, const char *key, con
     {
         return nvs_helper_erase_key(handle, key);
     }
+
+    ESP_LOGD(TAG, "storing string %s (%zu bytes)", key, strlen(value));
     return nvs_set_str(handle, key, value);
 }
 
