@@ -32,6 +32,9 @@ void setup_example()
 #ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
     mqtt_cfg.client_id = CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID;
 #endif
+#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_TRANSPORT
+    mqtt_cfg.transport = CONFIG_EXAMPLE_AWS_IOT_MQTT_TRANSPORT;
+#endif
 
     mqtt_cfg.cert_pem = (const char *)aws_root_ca_pem_start;
     mqtt_cfg.cert_len = aws_root_ca_pem_end - aws_root_ca_pem_start;
