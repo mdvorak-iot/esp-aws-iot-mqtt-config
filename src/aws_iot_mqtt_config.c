@@ -208,7 +208,7 @@ esp_err_t aws_iot_mqtt_config_store(const esp_mqtt_client_config_t *mqtt_cfg)
     HANDLE_ERROR(err = nvs_helper_set_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_URI, mqtt_cfg->uri), goto error);
     HANDLE_ERROR(err = nvs_helper_set_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_ID, mqtt_cfg->client_id), goto error);
     HANDLE_ERROR(err = nvs_set_i32(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_TRANSPORT, mqtt_cfg->transport), goto error);
-    ESP_LOGD(TAG, "stored i32 %s=%d", AWS_IOT_MQTT_CONFIG_NVS_KEY_PORT, mqtt_cfg->transport);
+    ESP_LOGD(TAG, "stored i32 %s=%d", AWS_IOT_MQTT_CONFIG_NVS_KEY_TRANSPORT, mqtt_cfg->transport);
     HANDLE_ERROR(err = nvs_helper_set_blob_or_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CERT, mqtt_cfg->cert_pem, mqtt_cfg->cert_len), goto error);
     HANDLE_ERROR(err = nvs_helper_set_blob_or_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_CERT, mqtt_cfg->client_cert_pem, mqtt_cfg->client_cert_len), goto error);
     HANDLE_ERROR(err = nvs_helper_set_blob_or_string(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_KEY, mqtt_cfg->client_key_pem, mqtt_cfg->client_key_len), goto error);
