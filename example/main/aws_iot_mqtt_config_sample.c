@@ -8,6 +8,13 @@ static const char TAG[] = "example";
 static bool mqtt_started = false;
 static esp_mqtt_client_handle_t mqtt_client = NULL;
 
+#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_STORE
+extern const uint8_t certificate_pem_crt_start[] asm("_binary_certificate_pem_crt_start");
+extern const uint8_t certificate_pem_crt_end[] asm("_binary_certificate_pem_crt_end");
+extern const uint8_t private_pem_key_start[] asm("_binary_private_pem_key_start");
+extern const uint8_t private_pem_key_end[] asm("_binary_private_pem_key_end");
+#endif
+
 void store_example()
 {
 #if CONFIG_EXAMPLE_AWS_IOT_MQTT_STORE
@@ -22,10 +29,12 @@ void store_example()
 #ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID
     mqtt_cfg.client_id = CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_ID;
 #endif
-    // TODO
-#ifdef CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_CERT_FILE
-    mqtt_cfg.client_cert_pem = CONFIG_EXAMPLE_AWS_IOT_MQTT_CLIENT_CERT_FILE;
-#endif
+
+    mqtt_cfg.client_cert_pem = (const char *)certificate_pem_crt_start;
+    mqtt_cfg.client_cert_len = certificate_pem_crt_end - certificate_pem_crt_start;
+
+    mqtt_cfg.client_key_pem = (const char *)private_pem_key_start;
+    mqtt_cfg.client_key_len = private_pem_key_end - private_pem_key_start;
 
     ESP_ERROR_CHECK(aws_iot_mqtt_config_store(&mqtt_cfg));
 #endif
