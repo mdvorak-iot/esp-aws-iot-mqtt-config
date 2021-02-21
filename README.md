@@ -1,6 +1,6 @@
 # aws_iot_mqtt_config component
 
-![platformio build](https://github.com/mdvorak-iot/esp-aws-iot-mqtt-config/workflows/platformio%20build/badge.svg)
+![platformio build](./workflows/platformio%20build/badge.svg)
 
 Component for [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/latest). Provides functions to store and load
 [MQTT config](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/protocols/mqtt.html#_CPPv424esp_mqtt_client_config_t)
