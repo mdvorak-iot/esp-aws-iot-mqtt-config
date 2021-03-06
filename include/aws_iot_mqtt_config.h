@@ -1,5 +1,4 @@
-#ifndef AWS_IOT_MQTT_CONFIG_H_
-#define AWS_IOT_MQTT_CONFIG_H_
+#pragma once
 
 #include <esp_err.h>
 #include <mqtt_client.h>
@@ -96,6 +95,4 @@ void aws_iot_mqtt_config_free_unused(esp_mqtt_client_config_t *mqtt_cfg);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
