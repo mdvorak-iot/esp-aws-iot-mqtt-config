@@ -1,8 +1,0 @@
-# Custom component config
-menu "esp-aws-iot-mqtt-config"
-    config LIB_EXAMPLE
-        int "Example variable"
-        default 0
-        help
-            Just example, remove this.
-endmenu
