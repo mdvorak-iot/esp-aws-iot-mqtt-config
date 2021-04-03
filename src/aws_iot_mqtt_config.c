@@ -177,7 +177,7 @@ esp_err_t aws_iot_mqtt_config_load(esp_mqtt_client_config_t *mqtt_cfg)
     HANDLE_ERROR(err = nvs_helper_get_blob(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENT_KEY, &mqtt_cfg->client_key_pem, &mqtt_cfg->client_key_len), goto error);
     size_t clientkey_password_len = 0; // value length in struct is an int, not size_t, for some reason
     HANDLE_ERROR(err = nvs_helper_get_blob(handle, AWS_IOT_MQTT_CONFIG_NVS_KEY_CLIENTKEY_PASSWORD, &mqtt_cfg->clientkey_password, &clientkey_password_len), goto error);
-    mqtt_cfg->clientkey_password_len = clientkey_password_len;
+    mqtt_cfg->clientkey_password_len = (int)clientkey_password_len;
 
 error:
     // Close and exit
